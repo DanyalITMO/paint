@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
    for(int i = 0; i < COLOR_NUMBER; i++)
     {
-        QObject::connect(vec_button[i],  SIGNAL(clicked()), vec_button[i], SLOT(getColor()));
+        QObject::connect(vec_button[i], SIGNAL(clicked()), vec_button[i], SLOT(getColor()));
         QObject::connect(vec_button[i], SIGNAL(changeColor(QColor)), &paint_w, SLOT(setColor(QColor)));
     }
 
@@ -44,4 +44,3 @@ int main(int argc, char *argv[])
    wgt.show();
     return a.exec();
 }
-

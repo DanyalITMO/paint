@@ -10,6 +10,10 @@ PaintWidget::PaintWidget(QWidget *parent)
 {
     mDrawMode = false;
     color_ = Qt::green;
+    painter = new QPainter(this);
+
+    mDrawBuffer.append(QPoint(0,0));
+
 }
 
 PaintWidget::~PaintWidget()
@@ -19,10 +23,15 @@ PaintWidget::~PaintWidget()
 
 void PaintWidget::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton)
+    {
         mDrawMode = true;
         mDrawBuffer.append(event->pos());
         event->accept();
+        //this->update();
+       // event->ignore();
+       // mDrawMode = false;
+
     }
 }
 
@@ -46,18 +55,16 @@ void PaintWidget::mouseMoveEvent(QMouseEvent *event)
 
 void PaintWidget::paintEvent(QPaintEvent *event)
 {
-    if (mDrawBuffer.size()<2) return;
-    QPainter painter(this);
-    painter.setPen(color_);
-    QList<QPoint>::const_iterator it = mDrawBuffer.begin();
-    QPoint start = *it;
-    it++;
+
+    painter->begin(this);
+
+    painter->setPen(color_);
+    it = mDrawBuffer.begin();
     while(it != mDrawBuffer.end()) {
-        QPoint end = *it;
-        painter.drawLine(start,end);
-        start = end;
+        painter->drawPoint(*it);
         it++;
     }
+    painter->end();
 }
 
 void PaintWidget::setColor(QColor color)

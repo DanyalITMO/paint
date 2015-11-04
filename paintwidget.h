@@ -5,6 +5,7 @@
 #include <QList>
 #include <QPoint>
 #include<QColor>
+#include<QPainter>
 class PaintWidget : public QWidget
 {
     Q_OBJECT
@@ -22,6 +23,9 @@ protected:
 private:
     QList<QPoint> mDrawBuffer;
     bool mDrawMode;
+    QPainter* painter;
+    QList<QPoint>::const_iterator it;
+    QPoint start;
 public slots:
     void setColor(QColor );
 };

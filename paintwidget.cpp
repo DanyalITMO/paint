@@ -3,16 +3,18 @@
 #include <QtCore/QLine>
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
+
+#include<algorithm>
 #include<iostream>
+#include<QDebug>
 
 PaintWidget::PaintWidget(QWidget *parent)
     : QWidget(parent)
 {
     mDrawMode = false;
     color_ = Qt::green;
-    painter = new QPainter(this);
+    counter_ = 0;
 
-    mDrawBuffer.append(QPoint(0,0));
 
 }
 
@@ -26,7 +28,8 @@ void PaintWidget::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
         mDrawMode = true;
-        mDrawBuffer.append(event->pos());
+        m_draw_buffer.append(event->pos());
+         counter_++;
         event->accept();
         //this->update();
        // event->ignore();
@@ -38,37 +41,68 @@ void PaintWidget::mousePressEvent(QMouseEvent *event)
 void PaintWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
+        //m_draw_buffer.append(event->pos());
+         counter_++;
         mDrawMode = false;
-        mDrawBuffer.append(event->pos());
+        m_draw_buffer.append(QPoint(0, 0));
+
         this->update();
-        event->accept();
+
+        //event->accept();
     }
 }
 
 void PaintWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (!mDrawMode) return;
-    mDrawBuffer.append(event->pos());
+    m_draw_buffer.append(event->pos());
+    counter_++;
     this->update();
     event->accept();
 }
 
+
 void PaintWidget::paintEvent(QPaintEvent *event)
 {
+    if (m_draw_buffer.size()<2) return;
+    QPainter painter(this);
+    painter.setPen(color_);
+    QList<QPoint>::iterator it = m_draw_buffer.begin();
 
-    painter->begin(this);
+    QPoint start = *it;
+    it++;
 
-    painter->setPen(color_);
-    it = mDrawBuffer.begin();
-    while(it != mDrawBuffer.end()) {
-        painter->drawPoint(*it);
-        it++;
-    }
-    painter->end();
+
+
+
+        while(it != m_draw_buffer.end())
+        {
+
+            if(it->x() == 0 && it->y() == 0)
+            {
+                if(counter_ - std::distance(m_draw_buffer.begin(), it) - 1 > 0)
+                {
+                    it++;
+                    start = *it;
+                }
+                else
+                {
+                    break;
+                }
+
+
+            }
+
+            QPoint end = *it;
+            painter.drawLine(start,end);
+            start = end;
+            it++;
+        }
+
+
 }
 
 void PaintWidget::setColor(QColor color)
 {
     this->color_ = color;
-    std::cout<<"fdgfd"<<std::endl;
 }

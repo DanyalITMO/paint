@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         paintwidget.cpp \
-    button.cpp
+    button.cpp \
+    mypoint.cpp
 
 HEADERS  += paintwidget.h \
-    button.h
+    button.h \
+    mypoint.h
 
 FORMS    += paintwidget.ui

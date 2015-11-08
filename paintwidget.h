@@ -9,7 +9,7 @@
 class PaintWidget : public QWidget
 {
     Q_OBJECT
-    QColor color_;
+
 public:
     PaintWidget(QWidget *parent = 0);
 
@@ -21,11 +21,14 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *event);
 private:
-    QList<QPoint> mDrawBuffer;
+    QColor color_;
+    QList<QPoint> m_draw_buffer;
+    QList<QPoint> line_list_;
+    unsigned int counter_;
+
     bool mDrawMode;
-    QPainter* painter;
-    QList<QPoint>::const_iterator it;
-    QPoint start;
+
+    QPoint end_position_;
 public slots:
     void setColor(QColor );
 };

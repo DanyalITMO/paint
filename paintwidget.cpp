@@ -28,34 +28,28 @@ void PaintWidget::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
         mDrawMode = true;
-        m_draw_buffer.append(event->pos());
-         counter_++;
+        m_draw_buffer.append(MyPoint(event->pos().x(), event->pos().y(), color_));
+        counter_++;
         event->accept();
-        //this->update();
-       // event->ignore();
-       // mDrawMode = false;
 
     }
 }
 
 void PaintWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton) {
-        //m_draw_buffer.append(event->pos());
-         counter_++;
+    if (event->button() == Qt::LeftButton)
+    {
+        counter_++;
         mDrawMode = false;
-        m_draw_buffer.append(QPoint(0, 0));
-
+        m_draw_buffer.append(MyPoint(0, 0, color_));
         this->update();
-
-        //event->accept();
     }
 }
 
 void PaintWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (!mDrawMode) return;
-    m_draw_buffer.append(event->pos());
+    m_draw_buffer.append(MyPoint(event->pos().x(), event->pos().y(), color_));
     counter_++;
     this->update();
     event->accept();
@@ -67,17 +61,14 @@ void PaintWidget::paintEvent(QPaintEvent *event)
     if (m_draw_buffer.size()<2) return;
     QPainter painter(this);
     painter.setPen(color_);
-    QList<QPoint>::iterator it = m_draw_buffer.begin();
+    QList<MyPoint>::iterator it = m_draw_buffer.begin();
 
-    QPoint start = *it;
+    MyPoint start = *it;
     it++;
-
-
 
 
         while(it != m_draw_buffer.end())
         {
-
             if(it->x() == 0 && it->y() == 0)
             {
                 if(counter_ - std::distance(m_draw_buffer.begin(), it) - 1 > 0)
@@ -93,7 +84,9 @@ void PaintWidget::paintEvent(QPaintEvent *event)
 
             }
 
-            QPoint end = *it;
+            MyPoint end = *it;
+
+            painter.setPen(start.getColor());
             painter.drawLine(start,end);
             start = end;
             it++;
@@ -105,4 +98,9 @@ void PaintWidget::paintEvent(QPaintEvent *event)
 void PaintWidget::setColor(QColor color)
 {
     this->color_ = color;
+}
+
+QColor PaintWidget::getColor(void)
+{
+    return this->color_;
 }

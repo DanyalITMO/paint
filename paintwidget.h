@@ -6,6 +6,8 @@
 #include <QPoint>
 #include<QColor>
 #include<QPainter>
+
+#include "mypoint.h"
 class PaintWidget : public QWidget
 {
     Q_OBJECT
@@ -22,15 +24,16 @@ protected:
     virtual void paintEvent(QPaintEvent *event);
 private:
     QColor color_;
-    QList<QPoint> m_draw_buffer;
-    QList<QPoint> line_list_;
+    QList<MyPoint> m_draw_buffer;
+    QList<MyPoint> line_list_;
     unsigned int counter_;
 
     bool mDrawMode;
 
     QPoint end_position_;
 public slots:
-    void setColor(QColor );
+    void setColor(QColor);
+    QColor getColor(void);
 };
 
 #endif // PAINTWIDGET_H

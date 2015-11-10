@@ -22,11 +22,17 @@ int main(int argc, char *argv[])
    QVector <Button*> vec_button;
    QVBoxLayout* layout = new QVBoxLayout;
 
+
     for(int i = 0; i < COLOR_NUMBER; i++)
      {
       vec_button.push_back(new Button(color_name[i]));
       layout->addWidget(vec_button[i]);
      }
+
+    //----------
+    QPushButton* save = new QPushButton("save");
+    layout->addWidget(save);
+    //-----
 
    QHBoxLayout* main_layout = new QHBoxLayout;
 
@@ -38,6 +44,7 @@ int main(int argc, char *argv[])
         QObject::connect(vec_button[i], SIGNAL(clicked()), vec_button[i], SLOT(getColor()));
         QObject::connect(vec_button[i], SIGNAL(changeColor(QColor)), &paint_w, SLOT(setColor(QColor)));
     }
+   QObject::connect(save, SIGNAL(clicked()), &paint_w, SLOT(save()));
 
    wgt.setLayout(main_layout);
 

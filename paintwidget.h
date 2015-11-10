@@ -33,7 +33,7 @@ private:
     QPoint end_position_;
 public slots:
     void setColor(QColor);
-    QColor getColor(void);
+    void save(void);
 };
 
 #endif // PAINTWIDGET_H

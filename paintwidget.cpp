@@ -3,6 +3,7 @@
 #include <QtCore/QLine>
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
+#include <QFileDialog>
 
 #include<algorithm>
 #include<iostream>
@@ -100,7 +101,25 @@ void PaintWidget::setColor(QColor color)
     this->color_ = color;
 }
 
-QColor PaintWidget::getColor(void)
+void PaintWidget::save(void)
 {
-    return this->color_;
+    QPixmap pix = this->grab();
+    QString strFilter;
+    QString str =   QFileDialog::getSaveFileName(0, tr("Save Pixmap"), "", "*.png ;; *.jpg ;; *.bmp", &strFilter);
+
+    if (!str.isEmpty())
+    {
+        if (strFilter.contains("jpg"))
+        {
+            pix.save(str.append(".jpg"), "JPG");
+        }
+        else if (strFilter.contains("bmp"))
+        {
+            pix.save(str.append(".bmp"), "BMP");
+        }
+        else
+        {
+            pix.save(str.append(".png"), "PNG");
+        }
+    }
 }
